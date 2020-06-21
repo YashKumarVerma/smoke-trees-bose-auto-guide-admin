@@ -8,19 +8,12 @@ class navBar extends React.Component {
     this.childRoute = window.location.pathname.split("/")[2];
   }
 
-  //   function to execure logout mechanism
   handleLogout = () => {
-    //   shout out to the world
     console.log("Logging you out");
-
-    // empty localstorage
     localStorage.removeItem("token");
-
-    // now redirect to dashboard
     this.setState({ redirect: true });
   };
 
-  //   function to handle redirect to login screen
   renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect to="/" />;
