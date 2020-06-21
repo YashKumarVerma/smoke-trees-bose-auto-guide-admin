@@ -1,11 +1,15 @@
 import React from "react";
 
-class LandingPage extends React.Component {
-  componentDidMount() {}
+import NavBar from "../components/Navbar";
+import MainMast from "../components/landingPage/MainMast";
+import LoginForm from "../components/landingPage/LoginForm";
 
-  render() {
-    return <div>LandingPage</div>;
-  }
-}
+const LandingPage = () => (
+  <div>
+    <NavBar isLoggedIn={false} />
+    <MainMast />
+    <LoginForm />
+  </div>
+);
 
 export default LandingPage;
