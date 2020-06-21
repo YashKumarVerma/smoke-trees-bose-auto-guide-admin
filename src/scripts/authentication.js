@@ -11,7 +11,7 @@ class Authentication {
         .then((resp) => {
           // save the items in local storage
           console.log(resp.data.payload);
-          localStorage.setItem("token", resp.data.payload);
+          localStorage.setItem("token", resp.data.payload.token);
 
           resolve({ error: false });
         })

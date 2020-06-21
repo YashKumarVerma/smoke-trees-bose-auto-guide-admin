@@ -4,8 +4,8 @@ import { Link, Redirect } from "react-router-dom";
 class navBar extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { redirect: false };
+    this.childRoute = window.location.pathname.split("/")[2];
   }
 
   //   function to execure logout mechanism
@@ -32,7 +32,8 @@ class navBar extends React.Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
         {this.renderRedirect()}
-        <Link to="/">
+        {console.log()}
+        <Link to="/dashboard">
           <div className="navbar-brand">Admin Panel</div>
         </Link>
         <button
@@ -48,7 +49,46 @@ class navBar extends React.Component {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarExpansion">
-          <ul className="navbar-nav mr-auto"></ul>
+          <ul className="navbar-nav mr-auto">
+            {this.props.isLoggedIn ? (
+              <>
+                <Link to="/dashboard">
+                  <li
+                    className={"nav-item " + (this.childRoute ? " " : "active")}
+                  >
+                    <a className="nav-link">
+                      Home <span className="sr-only">(current)</span>
+                    </a>
+                  </li>
+                </Link>
+                <Link to="/dashboard/users">
+                  <li
+                    className={
+                      "nav-item " +
+                      (this.childRoute === "users" ? "active" : "")
+                    }
+                  >
+                    <a className="nav-link">
+                      Users <span className="sr-only">(current)</span>
+                    </a>
+                  </li>
+                </Link>
+
+                <Link to="/dashboard/posts">
+                  <li
+                    className={
+                      "nav-item " +
+                      (this.childRoute === "posts" ? "active" : "")
+                    }
+                  >
+                    <a className="nav-link">
+                      Posts <span className="sr-only">(current)</span>
+                    </a>
+                  </li>
+                </Link>
+              </>
+            ) : null}
+          </ul>
           <form className="form-inline my-2 my-md-0">
             {this.props.isLoggedIn ? (
               <button

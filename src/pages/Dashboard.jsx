@@ -1,11 +1,13 @@
 import React from "react";
 
-class Dashboard extends React.Component {
-  componentDidMount() {}
+import NavBar from "../components/Navbar";
+import StatsWidget from "../components/dashboard/Widgets";
 
-  render() {
-    return <div>Dashboard</div>;
-  }
-}
+const Dashboard = () => (
+  <div>
+    <NavBar isLoggedIn={true} />
+    <StatsWidget />
+  </div>
+);
 
 export default Dashboard;
