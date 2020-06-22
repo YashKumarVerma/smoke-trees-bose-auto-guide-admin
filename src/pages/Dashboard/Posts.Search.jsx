@@ -1,8 +1,7 @@
 import React from "react";
 
 import Navbar from "../../components/Navbar";
-import CreateNewPost from "../../components/dashboard/CreateNewPost.jsx";
-import ListPost from "../../components/dashboard/ListPost.jsx";
+import SearchPost from "../../components/dashboard/SearchPost";
 
 class PostsPage extends React.Component {
   constructor() {
@@ -16,12 +15,11 @@ class PostsPage extends React.Component {
         <br />
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-5">
-              <ListPost />
+            <div className="col-md-2"></div>
+            <div className="col-md-8">
+              <SearchPost />
             </div>
-            <div className="col-md-7">
-              <CreateNewPost />
-            </div>
+            <div className="col-md-2"></div>
           </div>
         </div>
         <br />

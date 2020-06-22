@@ -6,7 +6,8 @@ import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import UsersPage from "./pages/Dashboard/Users";
-import PostsPage from "./pages/Dashboard/Posts";
+import CreatePostPage from "./pages/Dashboard/Post.Create";
+import SearchPostPage from "./pages/Dashboard/Posts.Search";
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/dashboard/users" component={UsersPage} />
-        <Route exact path="/dashboard/posts" component={PostsPage} />
+        <Route exact path="/dashboard/createPost" component={CreatePostPage} />
+        <Route exact path="/dashboard/searchPost" component={SearchPostPage} />
       </Switch>
     </BrowserRouter>
   );

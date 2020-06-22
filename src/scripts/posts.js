@@ -20,6 +20,26 @@ class Post {
         });
     });
   }
+
+  /** get all posts page wise */
+  static GetAllPosts(param) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${config.host}/post/list/${param.page}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((resp) => {
+          // save the items in local storage
+          resolve(resp.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    });
+  }
 }
 
 export const CreateNewPost = Post.CreateNewPost;
+export const GetAllPosts = Post.GetAllPosts;
