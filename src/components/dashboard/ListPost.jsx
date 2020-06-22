@@ -1,9 +1,47 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import InputElement from "./../../components/InputElement";
-
+import { CreateNewPost } from "./../../scripts/posts.js";
 class NewPostCard extends React.Component {
-  componentDidMount() {}
+  constructor() {
+    super();
+    this.state = {};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const eventDetails = {
+        eventName: this.state.eventName,
+        slug: this.state.eventSlug,
+        description: this.state.eventDescription,
+        participants: [],
+        sessions: [],
+      };
+
+      const response = await CreateNewPost(eventDetails);
+      this.props.addEvent(response);
+      console.log("Successfully created new event :  ", response);
+      window.$("#createEventModal").modal("hide");
+
+      this.setState({
+        eventName: "",
+        eventSlug: "",
+        eventDescription: "",
+      });
+    } catch (err) {
+      console.log("Error while creating new event", err);
+    }
+  };
 
   handleChange() {
     console.log(this.state);

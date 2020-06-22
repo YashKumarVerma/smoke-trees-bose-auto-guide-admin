@@ -1,11 +1,55 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import InputElement from "./../../components/InputElement";
+import FileUploader from "./../dashboard/FileUploader";
+import { addNewPost } from "./../../redux/posts/posts.actions";
+import { CreateNewPost } from "./../../scripts/posts";
 
 class NewPostCard extends React.Component {
-  handleChange() {
-    console.log(this.state);
+  /** initialize state of component */
+  constructor() {
+    super();
+    this.state = {
+      name: "",
+      category: "",
+      details: "",
+      isFeatured: "",
+    };
   }
+
+  /** handle form changes */
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  /** submit the form */
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log({ state: this.state, props: this.props });
+    try {
+      const PostDetails = {
+        name: this.state.name,
+        content: this.state.details,
+        category: this.state.category,
+        featured: this.state.isFeatured === "on",
+        images: [this.props.attachedImage],
+      };
+
+      const response = await CreateNewPost({ post: PostDetails });
+      this.props.addNewPost(response);
+
+      console.log("Successfully created new Post :  ", response);
+
+      this.setState({ name: "", category: "", details: "", isFeatured: "" });
+    } catch (err) {
+      alert("Error while Creating post");
+      console.log("Error while Creating post");
+    }
+  };
+
+  /** main render function */
   render() {
     return (
       <div>
@@ -20,6 +64,7 @@ class NewPostCard extends React.Component {
               type="text"
               name="name"
               onChange={this.handleChange}
+              value={this.state.name}
               required
             />
 
@@ -29,44 +74,35 @@ class NewPostCard extends React.Component {
               type="text"
               name="category"
               onChange={this.handleChange}
+              value={this.state.category}
               required
             />
 
-            <div class="form-group">
+            <div className="form-group">
               <label for="details">Details</label>
               <textarea
                 placeholder="Enter details about post here"
-                class="form-control"
+                className="form-control"
                 id="details"
                 name="details"
                 rows="6"
+                onChange={this.handleChange}
+                value={this.state.details}
               ></textarea>
             </div>
 
-            <div class="form-group">
-              <div class="custom-file">
-                <input
-                  type="file"
-                  class="custom-file-input"
-                  id="imageUpload"
-                  name="image"
-                  accept="image/*"
-                />
-                <label class="custom-file-label" for="imageUpload">
-                  Choose Image
-                </label>
-              </div>
-            </div>
+            <FileUploader />
 
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
+            <div className="form-group">
+              <div className="custom-control custom-checkbox">
                 <input
                   type="checkbox"
-                  class="custom-control-input"
+                  className="custom-control-input"
                   id="isFeatured"
                   name="isFeatured"
+                  onChange={this.handleChange}
                 />
-                <label class="custom-control-label" for="isFeatured">
+                <label className="custom-control-label" for="isFeatured">
                   Highlight this post
                 </label>
               </div>
@@ -74,7 +110,11 @@ class NewPostCard extends React.Component {
           </div>
 
           <div className="card-footer">
-            <button type="button" className="btn btn-outline-dark">
+            <button
+              type="button"
+              className="btn btn-outline-dark float-right"
+              onClick={this.handleSubmit}
+            >
               Create New Post
             </button>
           </div>
@@ -84,4 +124,14 @@ class NewPostCard extends React.Component {
   }
 }
 
-export default NewPostCard;
+// export default NewPostCard;
+
+const mapDispatchToProps = (dispatch) => ({
+  addNewPost: (post) => dispatch(addNewPost(post)),
+});
+
+const mapStateToProps = (state) => {
+  return { attachedImage: state.attachedImage };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewPostCard);
