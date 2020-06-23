@@ -1,67 +1,102 @@
 import React from "react";
-import { connect } from "react-redux";
+import { GetAllPosts } from "./../../scripts/posts";
+import Pagination from "react-js-pagination";
 
-import InputElement from "./../../components/InputElement";
-import { CreateNewPost } from "./../../scripts/posts.js";
-class NewPostCard extends React.Component {
+import PostCard from "./PostCard.jsx";
+
+class SearchPost extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      page: {
+        totalDocs: 0,
+        limit: 0,
+        docs: [],
+      },
+      activePage: 1,
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
+  /** to trigger initial load */
+  componentDidMount = async () => {
+    this.LoadPosts();
+  };
+
+  /** to get data from nth page */
+  LoadPosts = async (number = 1) => {
+    try {
+      /** loading page number using api call */
+      const response = await GetAllPosts(number);
+      this.setState({
+        page: response.payload,
+      });
+    } catch (e) {
+      /** handle error when unable to load pages */
+      console.log(`Error while Loading Posts for page : ${number}`);
+    }
+  };
+
+  /** handle page change operations from pagination */
+  handlePageChange = (pageNumber) => {
+    console.log(`Hopping to page ${pageNumber}`);
+    this.LoadPosts(pageNumber);
+    this.setState({ activePage: pageNumber });
+  };
+
+  /** handle change for search operation */
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
+  /** handle search button submit */
   handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(this.state);
     try {
-      const eventDetails = {
-        eventName: this.state.eventName,
-        slug: this.state.eventSlug,
-        description: this.state.eventDescription,
-        participants: [],
-        sessions: [],
-      };
-
-      const response = await CreateNewPost(eventDetails);
-      this.props.addEvent(response);
-      console.log("Successfully created new event :  ", response);
-      window.$("#createEventModal").modal("hide");
-
-      this.setState({
-        eventName: "",
-        eventSlug: "",
-        eventDescription: "",
-      });
+      console.log(this.state);
+      //   const eventDetails = {
+      //     eventName: this.state.eventName,
+      //     slug: this.state.eventSlug,
+      //     description: this.state.eventDescription,
+      //     participants: [],
+      //     sessions: [],
+      //   };
+      //   const response = await CreateNewPost(eventDetails);
+      //   this.props.addEvent(response);
+      //   console.log("Successfully created new event :  ", response);
+      //   window.$("#createEventModal").modal("hide");
+      //   this.setState({
+      //     eventName: "",
+      //     eventSlug: "",
+      //     eventDescription: "",
+      //   });
     } catch (err) {
       console.log("Error while creating new event", err);
     }
   };
 
-  handleChange() {
-    console.log(this.state);
-  }
   render() {
     return (
       <div>
         <div className="card border-dark">
           <div className="card-header">
             <h5 className="card-title">
-              <form class="form-inline float-right">
+              <form className="form-inline float-right">
                 <input
-                  class="form-control"
+                  className="form-control"
                   type="search"
                   placeholder="Search for posts"
                   aria-label="Search"
+                  onChange={this.handleChange}
                 />
                 <button
-                  class="btn btn-outline-success float-right"
-                  type="submit"
+                  className="btn btn-outline-success float-right"
+                  type="button"
+                  onClick={this.handleSubmit}
                 >
                   Search
                 </button>
@@ -69,80 +104,29 @@ class NewPostCard extends React.Component {
             </h5>
           </div>
           <div className="card-body">
-            <div className="card">
-              <div className="card-body">
-                <div className="card-title">
-                  <span class="badge badge-pill badge-success float-right">
-                    Featured
-                  </span>
-                  <h5>Card Title</h5>
-                </div>
-                <p className="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
-                <button className="btn btn-outline-danger ">Delete</button>
-                <button className="btn btn-outline-info float-right ">
-                  Show Image
-                </button>
-                <button className="btn btn-outline-primary mr-md-3 float-right">
-                  Edit
-                </button>
+            {this.state.page.docs.map((doc) => (
+              <div>
+                <PostCard {...doc} key={doc._id} />
+                <br />
               </div>
-            </div>
-            <br />{" "}
-            <div className="card">
-              <div className="card-body">
-                <div className="card-title">
-                  <span class="badge badge-pill badge-success float-right">
-                    Featured
-                  </span>
-                  <h5>Card Title</h5>
-                </div>
-                <p className="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
-                <button className="btn btn-outline-danger text-danger ">
-                  Delete
-                </button>
-                <button className="btn btn-outline-primary text-primary float-right">
-                  Edit
-                </button>
-              </div>
-            </div>
-            <br />
+            ))}
           </div>
-          <div className="card-footer">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">
-                    Previous
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    Next
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <div className="card-footer ">
+            <div className="d-flex justify-content-center">
+              <Pagination
+                itemClass="page-item"
+                linkClass="page-link"
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.page.limit}
+                totalItemsCount={this.state.page.totalDocs}
+                pageRangeDisplayed={8}
+                onChange={this.handlePageChange}
+                nextPageText="Next"
+                prevPageText="Previous"
+                lastPageText="Last"
+                firstPageText="First"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -150,4 +134,4 @@ class NewPostCard extends React.Component {
   }
 }
 
-export default NewPostCard;
+export default SearchPost;
