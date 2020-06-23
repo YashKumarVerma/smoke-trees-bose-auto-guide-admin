@@ -36,11 +36,18 @@ class NewPostCard extends React.Component {
         featured: this.state.isFeatured === "on",
         images: [this.props.attachedImage],
       };
-
+      if (
+        PostDetails.images === null ||
+        PostDetails.images[0] === null ||
+        PostDetails.images[0] === undefined
+      ) {
+        PostDetails.images = [];
+      }
       const response = await CreateNewPost({ post: PostDetails });
       this.props.addNewPost(response);
 
       console.log("Successfully created new Post :  ", response);
+      alert(`New Post : "${PostDetails.name}" was created`);
 
       this.setState({ name: "", category: "", details: "", isFeatured: "" });
     } catch (err) {

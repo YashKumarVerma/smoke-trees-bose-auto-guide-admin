@@ -1,6 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 import { DeletePost, EditPost } from "./../../scripts/posts";
 import InputElement from "./../InputElement";
+import FileUploader from "./FileUploader";
 
 class PostCard extends React.Component {
   constructor() {
@@ -8,6 +10,7 @@ class PostCard extends React.Component {
     this.state = {
       deleted: false,
       editMode: false,
+      uploadMode: false,
       name: "",
       productType: "",
       content: "",
@@ -15,23 +18,61 @@ class PostCard extends React.Component {
       images: [],
     };
     this.editPost = this.editPost.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
     this.saveEdits = this.saveEdits.bind(this);
+    this.saveUploadedImage = this.saveUploadedImage.bind(this);
     this.deletePostTrigger = this.deletePostTrigger.bind(this);
     this.terminateEditMode = this.terminateEditMode.bind(this);
     this.handleEditFieldChange = this.handleEditFieldChange.bind(this);
   }
 
   componentDidMount = () => {
-    const { name, productType, content, featured } = this.props;
-    this.setState({ name, productType, content, featured });
+    const { name, productType, content, featured, images } = this.props;
+    this.setState({
+      name,
+      productType,
+      content,
+      featured,
+      images,
+    });
   };
 
   editPost() {
-    /** starting edit post mechanism */
     this.setState({
       editMode: true,
     });
   }
+
+  uploadImage() {
+    this.setState({
+      uploadMode: true,
+    });
+  }
+
+  saveUploadedImage = async () => {
+    /** make update request with image url */
+    const { _id, attachedImage } = this.props;
+    try {
+      const response = await EditPost({
+        post: {
+          _id: _id,
+          images: [attachedImage],
+        },
+      });
+      if (response.payload.ok) {
+        this.setState({
+          images: [attachedImage],
+          uploadMode: false,
+        });
+        alert("Image Attached");
+      }
+    } catch (err) {
+      alert("Error updating Post");
+      console.log(err);
+    }
+
+    this.terminateEditMode();
+  };
 
   deletePostTrigger() {
     DeletePost(this.props.id)
@@ -54,6 +95,10 @@ class PostCard extends React.Component {
     this.setState({
       editMode: false,
     });
+  };
+
+  terminateUploadMode = () => {
+    this.setState({ uploadMode: false });
   };
 
   saveEdits = async () => {
@@ -124,8 +169,11 @@ class PostCard extends React.Component {
                     Show Image
                   </button>
                 ) : (
-                  <button className="btn float-right " disabled>
-                    No Image Attached
+                  <button
+                    className="btn float-right  btn-outline-secondary"
+                    onClick={this.uploadImage}
+                  >
+                    No Image Attached. Upload Image
                   </button>
                 )}
                 {this.state.editMode ? null : (
@@ -208,10 +256,41 @@ class PostCard extends React.Component {
                 </div>
               </div>
             ) : null}
+            {this.state.uploadMode ? (
+              <div>
+                <div className="card mb-5 mt-2">
+                  <div className="card-body">
+                    <h5 className="card-title">Upload Image</h5>
+                    <div className="card-text text-body">
+                      <FileUploader />
+                    </div>
+                  </div>
+                  <div className="card-footer">
+                    <button
+                      className="btn btn-success float-right mt-2 btn-sm"
+                      onClick={this.saveUploadedImage}
+                    >
+                      Save Changes
+                    </button>
+                    <button
+                      className="btn btn-danger float-left mt-2 btn-sm "
+                      onClick={this.terminateUploadMode}
+                    >
+                      Discard Changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
       </div>
     );
   }
 }
-export default PostCard;
+
+const mapStateToProps = (state) => {
+  return { attachedImage: state.attachedImage };
+};
+
+export default connect(mapStateToProps)(PostCard);
