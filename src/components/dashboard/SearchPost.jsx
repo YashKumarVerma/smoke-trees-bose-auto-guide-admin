@@ -1,5 +1,5 @@
 import React from "react";
-import { GetAllPosts } from "./../../scripts/posts";
+import { GetAllPosts, SearchPosts } from "./../../scripts/posts";
 import Pagination from "react-js-pagination";
 
 import PostCard from "./PostCard.jsx";
@@ -14,6 +14,8 @@ class SearchPost extends React.Component {
         docs: [],
       },
       activePage: 1,
+      searchString: "",
+      searchingMode: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,10 +41,31 @@ class SearchPost extends React.Component {
     }
   };
 
+  /** to search posts */
+  SearchPosts = async (page = 1) => {
+    const searchSlug = this.state.searchString.trim();
+    try {
+      const response = await SearchPosts(searchSlug, page);
+      this.setState({
+        page: response.payload,
+        activePage: page,
+      });
+    } catch (err) {
+      console.log("Error while creating new event", err);
+    }
+  };
+
   /** handle page change operations from pagination */
   handlePageChange = (pageNumber) => {
     console.log(`Hopping to page ${pageNumber}`);
-    this.LoadPosts(pageNumber);
+    if (this.state.searchingMode) {
+      console.log(`Searching in page ${pageNumber} `);
+      this.SearchPosts(pageNumber);
+      console.log(this.state.page);
+    } else {
+      console.log(`Listing page ${pageNumber} `);
+      this.LoadPosts(pageNumber);
+    }
     this.setState({ activePage: pageNumber });
   };
 
@@ -55,28 +78,8 @@ class SearchPost extends React.Component {
   /** handle search button submit */
   handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(this.state);
-    try {
-      console.log(this.state);
-      //   const eventDetails = {
-      //     eventName: this.state.eventName,
-      //     slug: this.state.eventSlug,
-      //     description: this.state.eventDescription,
-      //     participants: [],
-      //     sessions: [],
-      //   };
-      //   const response = await CreateNewPost(eventDetails);
-      //   this.props.addEvent(response);
-      //   console.log("Successfully created new event :  ", response);
-      //   window.$("#createEventModal").modal("hide");
-      //   this.setState({
-      //     eventName: "",
-      //     eventSlug: "",
-      //     eventDescription: "",
-      //   });
-    } catch (err) {
-      console.log("Error while creating new event", err);
-    }
+    this.setState({ searchingMode: true });
+    this.SearchPosts();
   };
 
   render() {
@@ -88,14 +91,15 @@ class SearchPost extends React.Component {
               <form className="form-inline float-right">
                 <input
                   className="form-control"
-                  type="search"
+                  type="text"
                   placeholder="Search for posts"
                   aria-label="Search"
+                  name="searchString"
                   onChange={this.handleChange}
                 />
                 <button
                   className="btn btn-outline-success float-right"
-                  type="button"
+                  type="submit"
                   onClick={this.handleSubmit}
                 >
                   Search

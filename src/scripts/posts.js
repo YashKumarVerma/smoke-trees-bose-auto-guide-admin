@@ -21,11 +21,50 @@ class Post {
     });
   }
 
+  // this function is used to authenticate user from server
+  static EditPost(param) {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`${config.host}/post/update`, param, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((resp) => {
+          // save the items in local storage
+          resolve(resp.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    });
+  }
+
   /** get all posts page wise */
   static GetAllPosts(param) {
     return new Promise((resolve, reject) => {
       axios
         .get(`${config.host}/post/list/${param}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((resp) => {
+          // save the items in local storage
+          resolve(resp.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    });
+  }
+
+  /** get all posts page wise */
+  static SearchPosts(slug, page) {
+    return new Promise((resolve, reject) => {
+      console.log(`${config.host}/post/search/${slug}?page=${page}`);
+      axios
+        .get(`${config.host}/post/search/${slug}?page=${page}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -68,3 +107,5 @@ class Post {
 export const CreateNewPost = Post.CreateNewPost;
 export const GetAllPosts = Post.GetAllPosts;
 export const DeletePost = Post.DeletePost;
+export const SearchPosts = Post.SearchPosts;
+export const EditPost = Post.EditPost;
