@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { DeletePost, EditPost } from "./../../scripts/posts";
 import InputElement from "./../InputElement";
 import FileUploader from "./FileUploader";
+import config from "../../scripts/config";
 
 class PostCard extends React.Component {
   constructor() {
@@ -133,6 +134,7 @@ class PostCard extends React.Component {
 
   render() {
     const { name, content, images, featured, productType } = this.state;
+    const { interested } = this.props;
     return (
       <div>
         {this.state.deleted ? null : (
@@ -140,6 +142,11 @@ class PostCard extends React.Component {
             <div className="card">
               <div className="card-body">
                 <div className="card-title">
+                  {interested.length !== 0 ? (
+                    <span className="badge badge-pull badge-danger float-right ml-2 mr-2">
+                      {interested.length} &#10084;
+                    </span>
+                  ) : null}
                   {featured ? (
                     <span className="badge badge-pill badge-success float-right">
                       Featured
@@ -165,9 +172,12 @@ class PostCard extends React.Component {
                 </button>
 
                 {images.length ? (
-                  <button className="btn btn-outline-info float-right ">
+                  <a
+                    className="btn btn-outline-info float-right"
+                    href={`${config.host}/${this.state.images[0]}`}
+                  >
                     Show Image
-                  </button>
+                  </a>
                 ) : (
                   <button
                     className="btn float-right  btn-outline-secondary"
@@ -232,6 +242,7 @@ class PostCard extends React.Component {
                           id="featured"
                           name="featured"
                           onChange={this.handleEditFieldChange}
+                          defaultChecked={this.state.featured}
                         />
                         <label className="custom-control-label" for="featured">
                           Highlight this post

@@ -88,22 +88,26 @@ class SearchPost extends React.Component {
         <div className="card border-dark">
           <div className="card-header">
             <h5 className="card-title">
-              <form className="form-inline float-right">
-                <input
-                  className="form-control"
-                  type="text"
-                  placeholder="Search for posts"
-                  aria-label="Search"
-                  name="searchString"
-                  onChange={this.handleChange}
-                />
-                <button
-                  className="btn btn-outline-success float-right"
-                  type="submit"
-                  onClick={this.handleSubmit}
-                >
-                  Search
-                </button>
+              <form>
+                <div className="input-group flex-fill">
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Search for posts"
+                    aria-label="Search"
+                    name="searchString"
+                    onChange={this.handleChange}
+                  />
+                  <span>
+                    <button
+                      className="btn btn-outline-success float-right"
+                      type="submit"
+                      onClick={this.handleSubmit}
+                    >
+                      Search
+                    </button>
+                  </span>
+                </div>
               </form>
             </h5>
           </div>

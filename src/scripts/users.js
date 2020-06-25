@@ -6,7 +6,7 @@ class User {
   static GetAllUsers(param) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${config.host}/user/list/${param}`, {
+        .get(`${config.host}/list/user/${param}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -22,11 +22,10 @@ class User {
   }
 
   /** get all posts page wise */
-  static SearchUser(slug) {
+  static SearchUser(slug, page) {
     return new Promise((resolve, reject) => {
-      console.log(`${config.host}/user/search/${slug}`);
       axios
-        .get(`${config.host}/post/search/${slug}`, {
+        .get(`${config.host}/list/user/search/${slug}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -42,5 +41,5 @@ class User {
   }
 }
 
-export const GetAllUsers = User.GetAllUsers;
-export const GetUserDetails = User.SearchUser;
+export const GetAllUsersFromDatabase = User.GetAllUsers;
+export const SearchUserFromDatabase = User.SearchUser;

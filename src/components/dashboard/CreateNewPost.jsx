@@ -32,7 +32,7 @@ class NewPostCard extends React.Component {
       const PostDetails = {
         name: this.state.name,
         content: this.state.details,
-        category: this.state.category,
+        productType: this.state.category,
         featured: this.state.isFeatured === "on",
         images: [this.props.attachedImage],
       };
