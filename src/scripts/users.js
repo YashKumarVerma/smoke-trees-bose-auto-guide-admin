@@ -21,6 +21,23 @@ class User {
     });
   }
 
+  static getDetailsOfIndividualUser(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${config.host}/user/search/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((resp) => {
+          resolve(resp.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    });
+  }
+
   /** get all posts page wise */
   static SearchUser(slug, page) {
     return new Promise((resolve, reject) => {
@@ -43,3 +60,4 @@ class User {
 
 export const GetAllUsersFromDatabase = User.GetAllUsers;
 export const SearchUserFromDatabase = User.SearchUser;
+export const getDetailsOfIndividualUser = User.getDetailsOfIndividualUser;

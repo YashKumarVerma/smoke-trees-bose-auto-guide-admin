@@ -1,5 +1,9 @@
+// const config = {
+//     host: "http://40.87.54.210:3001",
+//   };
+
 const config = {
-  host: "http://40.87.54.210:3001",
+  host: "http://127.0.0.1:3000",
 };
 
 export default config;

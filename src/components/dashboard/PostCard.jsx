@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { DeletePost, EditPost } from "./../../scripts/posts";
+import { getDetailsOfIndividualUser } from "./../../scripts/users";
 import InputElement from "./../InputElement";
 import FileUploader from "./FileUploader";
 import config from "../../scripts/config";
@@ -12,15 +13,19 @@ class PostCard extends React.Component {
       deleted: false,
       editMode: false,
       uploadMode: false,
+      likerView: false,
       name: "",
       productType: "",
       content: "",
       featured: "off",
       images: [],
+      interested: [],
+      interestedDetails: [],
     };
     this.editPost = this.editPost.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.saveEdits = this.saveEdits.bind(this);
+    this.showLikers = this.showLikers.bind(this);
     this.saveUploadedImage = this.saveUploadedImage.bind(this);
     this.deletePostTrigger = this.deletePostTrigger.bind(this);
     this.terminateEditMode = this.terminateEditMode.bind(this);
@@ -28,13 +33,21 @@ class PostCard extends React.Component {
   }
 
   componentDidMount = () => {
-    const { name, productType, content, featured, images } = this.props;
+    const {
+      name,
+      productType,
+      content,
+      featured,
+      images,
+      interested,
+    } = this.props;
     this.setState({
       name,
       productType,
       content,
       featured,
       images,
+      interested,
     });
   };
 
@@ -91,6 +104,17 @@ class PostCard extends React.Component {
     console.log(`Deleting Post :  ${this.props.id}`);
   }
 
+  showLikers = async () => {
+    const interestedDetails = [];
+    for (let i = 0; i < this.state.interested.length; i += 1) {
+      const response = await getDetailsOfIndividualUser(
+        this.state.interested[i]
+      );
+      interestedDetails.push(response.payload);
+    }
+    this.setState({ interestedDetails, likerView: !this.state.likerView });
+  };
+
   /** to end the edit session */
   terminateEditMode = () => {
     this.setState({
@@ -143,7 +167,10 @@ class PostCard extends React.Component {
               <div className="card-body">
                 <div className="card-title">
                   {interested.length !== 0 ? (
-                    <span className="badge badge-pull badge-danger float-right ml-2 mr-2">
+                    <span
+                      onClick={this.showLikers}
+                      className="badge badge-pull badge-danger float-right ml-2 mr-2"
+                    >
                       {interested.length} &#10084;
                     </span>
                   ) : null}
@@ -174,7 +201,7 @@ class PostCard extends React.Component {
                 {images.length ? (
                   <a
                     className="btn btn-outline-info float-right"
-                    href={`${config.host}/${this.state.images[0]}`}
+                    href={`${this.state.images[0]}`}
                   >
                     Show Image
                   </a>
@@ -289,6 +316,30 @@ class PostCard extends React.Component {
                     >
                       Discard Changes
                     </button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {this.state.likerView ? (
+              <div>
+                <div>
+                  <div className="card mb-5 mt-2">
+                    <div className="card-body">
+                      <h5 className="card-title">People who liked this</h5>
+                      <div className="card-text text-body">
+                        <ul className="list-group">
+                          {this.state.interestedDetails.map((user) => (
+                            <li className="list-group-item">
+                              {user.name} : (
+                              <span className="text-muted">
+                                {user.mobileNumber}
+                              </span>
+                              )
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
