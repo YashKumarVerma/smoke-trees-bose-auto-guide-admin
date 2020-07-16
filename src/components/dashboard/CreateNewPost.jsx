@@ -15,6 +15,9 @@ class NewPostCard extends React.Component {
       category: "",
       details: "",
       isFeatured: "",
+      city: "",
+      state: "",
+      priority: 0,
     };
   }
 
@@ -35,6 +38,9 @@ class NewPostCard extends React.Component {
         productType: this.state.category,
         featured: this.state.isFeatured === "on",
         images: [this.props.attachedImage],
+        city: this.state.city,
+        state: this.state.state,
+        priority: this.state.priority,
       };
       if (
         PostDetails.images === null ||
@@ -82,6 +88,36 @@ class NewPostCard extends React.Component {
               name="category"
               onChange={this.handleChange}
               value={this.state.category}
+              required
+            />
+
+            <InputElement
+              label="City"
+              placeholder="Enter the city of operation for business"
+              type="text"
+              name="city"
+              onChange={this.handleChange}
+              value={this.state.city}
+              required
+            />
+
+            <InputElement
+              label="State"
+              placeholder="Enter the state of operation for business"
+              type="text"
+              name="state"
+              onChange={this.handleChange}
+              value={this.state.state}
+              required
+            />
+
+            <InputElement
+              label="Priority"
+              placeholder="The higher the priority, the higher it's shown on listings"
+              type="number"
+              name="priority"
+              onChange={this.handleChange}
+              value={this.state.priority}
               required
             />
 

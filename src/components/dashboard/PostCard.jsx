@@ -21,6 +21,9 @@ class PostCard extends React.Component {
       images: [],
       interested: [],
       interestedDetails: [],
+      priority: 0,
+      city: "",
+      state: "",
     };
     this.editPost = this.editPost.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
@@ -40,6 +43,9 @@ class PostCard extends React.Component {
       featured,
       images,
       interested,
+      priority,
+      city,
+      state,
     } = this.props;
     this.setState({
       name,
@@ -48,6 +54,9 @@ class PostCard extends React.Component {
       featured,
       images,
       interested,
+      priority,
+      city,
+      state,
     });
   };
 
@@ -127,9 +136,26 @@ class PostCard extends React.Component {
   };
 
   saveEdits = async () => {
-    const { name, productType, content, featured } = this.state;
+    const {
+      name,
+      productType,
+      content,
+      featured,
+      city,
+      state,
+      priority,
+    } = this.state;
     const { _id } = this.props;
-    console.log({ name, productType, content, featured, _id });
+    console.log({
+      name,
+      productType,
+      content,
+      featured,
+      _id,
+      city,
+      state,
+      priority,
+    });
     try {
       const response = await EditPost({
         post: {
@@ -138,6 +164,9 @@ class PostCard extends React.Component {
           content,
           featured: featured === "on" ? true : false,
           _id: _id,
+          city,
+          state,
+          priority,
         },
       });
       if (response.payload.ok) {
@@ -157,7 +186,16 @@ class PostCard extends React.Component {
   };
 
   render() {
-    const { name, content, images, featured, productType } = this.state;
+    const {
+      name,
+      content,
+      images,
+      featured,
+      productType,
+      city,
+      state,
+      priority,
+    } = this.state;
     const { interested } = this.props;
     return (
       <div>
@@ -190,7 +228,12 @@ class PostCard extends React.Component {
                     Category: {productType}{" "}
                   </span>
                 ) : null}
-                <p className="card-text">{content}</p>
+                <p className="card-text">
+                  {content} <br /> <br /> <hr />
+                  <b>City</b>: {city} <br />
+                  <b>State</b>: {state} <br />
+                  <b>Priority</b>: {priority}
+                </p>
                 <button
                   className="btn btn-outline-danger"
                   onClick={this.deletePostTrigger}
@@ -245,6 +288,36 @@ class PostCard extends React.Component {
                       name="productType"
                       onChange={this.handleEditFieldChange}
                       value={this.state.productType}
+                      required
+                    />
+
+                    <InputElement
+                      label="City"
+                      placeholder="Enter the city of operation"
+                      type="text"
+                      name="city"
+                      onChange={this.handleEditFieldChange}
+                      value={this.state.city}
+                      required
+                    />
+
+                    <InputElement
+                      label="State"
+                      placeholder="Enter the state of operation"
+                      type="text"
+                      name="state"
+                      onChange={this.handleEditFieldChange}
+                      value={this.state.state}
+                      required
+                    />
+
+                    <InputElement
+                      label="Priority"
+                      placeholder="Set priority rating for post, higher implies more important"
+                      type="number"
+                      name="priority"
+                      onChange={this.handleEditFieldChange}
+                      value={this.state.priority}
                       required
                     />
 
