@@ -67,6 +67,19 @@ class navBar extends React.Component {
                   </li>
                 </Link>
 
+                <Link to="/dashboard/testimonials">
+                  <li
+                    className={
+                      "nav-item " +
+                      (this.childRoute === "testimonials" ? "active" : "")
+                    }
+                  >
+                    <a className="nav-link">
+                      Testimonials <span className="sr-only">(current)</span>
+                    </a>
+                  </li>
+                </Link>
+
                 <Link to="/dashboard/createPost">
                   <li
                     className={

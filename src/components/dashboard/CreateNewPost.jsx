@@ -55,7 +55,15 @@ class NewPostCard extends React.Component {
       console.log("Successfully created new Post :  ", response);
       alert(`New Post : "${PostDetails.name}" was created`);
 
-      this.setState({ name: "", category: "", details: "", isFeatured: "" });
+      this.setState({
+        name: "",
+        category: "",
+        details: "",
+        isFeatured: "",
+        state: "",
+        city: "",
+        priority: "",
+      });
     } catch (err) {
       alert("Error while Creating post");
       console.log("Error while Creating post");
