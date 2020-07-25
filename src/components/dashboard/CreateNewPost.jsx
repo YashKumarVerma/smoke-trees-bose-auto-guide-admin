@@ -18,6 +18,7 @@ class NewPostCard extends React.Component {
       city: "",
       state: "",
       priority: 0,
+      advt_type: "manufacture",
     };
   }
 
@@ -33,14 +34,15 @@ class NewPostCard extends React.Component {
     console.log({ state: this.state, props: this.props });
     try {
       const PostDetails = {
+        city: this.state.city,
         name: this.state.name,
+        state: this.state.state,
         content: this.state.details,
+        priority: this.state.priority,
+        advt_type: this.state.advt_type,
         productType: this.state.category,
         featured: this.state.isFeatured === "on",
         images: [this.props.attachedImage],
-        city: this.state.city,
-        state: this.state.state,
-        priority: this.state.priority,
       };
       if (
         PostDetails.images === null ||
@@ -140,6 +142,20 @@ class NewPostCard extends React.Component {
                 onChange={this.handleChange}
                 value={this.state.details}
               ></textarea>
+            </div>
+
+            <div className="form-group">
+              <select
+                onChange={this.handleChange}
+                class="form-control form-control"
+                name="advt_type"
+              >
+                <option value="manufacture" selected>
+                  Manufacture
+                </option>
+                <option value="retailer">Retailer</option>
+                <option value="distributer">Distributer</option>
+              </select>
             </div>
 
             <FileUploader />

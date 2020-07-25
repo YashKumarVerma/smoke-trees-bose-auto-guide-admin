@@ -16,6 +16,7 @@ class SearchPost extends React.Component {
       activePage: 1,
       searchString: "",
       searchingMode: false,
+      category: "distributer",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,7 +32,7 @@ class SearchPost extends React.Component {
   LoadPosts = async (number = 1) => {
     try {
       /** loading page number using api call */
-      const response = await GetAllPosts(number);
+      const response = await GetAllPosts(number, this.state.category);
       this.setState({
         page: response.payload,
       });
@@ -45,7 +46,7 @@ class SearchPost extends React.Component {
   SearchPosts = async (page = 1) => {
     const searchSlug = this.state.searchString.trim();
     try {
-      const response = await SearchPosts(searchSlug, page);
+      const response = await SearchPosts(searchSlug, page, this.state.category);
       this.setState({
         page: response.payload,
         activePage: page,
@@ -72,7 +73,9 @@ class SearchPost extends React.Component {
   /** handle change for search operation */
   handleChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => {
+      console.log(this.state);
+    });
   };
 
   /** handle search button submit */
@@ -89,7 +92,29 @@ class SearchPost extends React.Component {
           <div className="card-header">
             <h5 className="card-title">
               <form>
-                <div className="input-group flex-fill">
+                <div className="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="categorySelect">
+                        Category
+                      </label>
+                    </div>
+                    <select
+                      name="category"
+                      class="custom-select"
+                      id="categorySelect"
+                      onChange={this.handleChange}
+                      onBlur={this.handleSubmit}
+                    >
+                      <option selected value="distributer">
+                        Distributer
+                      </option>
+                      <option value="manufacture">Manufacture</option>
+                      <option value="retail">Retail</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group input-group flex-fill">
                   <input
                     className="form-control"
                     type="text"

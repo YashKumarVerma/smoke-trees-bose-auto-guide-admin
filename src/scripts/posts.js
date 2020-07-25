@@ -41,10 +41,10 @@ class Post {
   }
 
   /** get all posts page wise */
-  static GetAllPosts(param) {
+  static GetAllPosts(param, category) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${config.host}/post/list/${param}`, {
+        .get(`${config.host}/post/list/${category}/${param}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -60,11 +60,16 @@ class Post {
   }
 
   /** get all posts page wise */
-  static SearchPosts(slug, page) {
+  static SearchPosts(slug, page, category) {
     return new Promise((resolve, reject) => {
-      console.log(`${config.host}/post/search/${slug}?page=${page}`);
+      if (slug === "") {
+        slug = " ";
+      }
+      console.log(
+        `${config.host}/post/search/${category}/${slug}?page=${page}`
+      );
       axios
-        .get(`${config.host}/post/search/${slug}?page=${page}`, {
+        .get(`${config.host}/post/search/${category}/${slug}?page=${page}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

@@ -4,7 +4,6 @@ import { DeletePost, EditPost } from "./../../scripts/posts";
 import { getDetailsOfIndividualUser } from "./../../scripts/users";
 import InputElement from "./../InputElement";
 import FileUploader from "./FileUploader";
-import config from "../../scripts/config";
 
 class PostCard extends React.Component {
   constructor() {
@@ -46,6 +45,7 @@ class PostCard extends React.Component {
       priority,
       city,
       state,
+      category,
     } = this.props;
     this.setState({
       name,
@@ -57,6 +57,7 @@ class PostCard extends React.Component {
       priority,
       city,
       state,
+      advt_type: category,
     });
   };
 
@@ -195,6 +196,7 @@ class PostCard extends React.Component {
       city,
       state,
       priority,
+      advt_type,
     } = this.state;
     const { interested } = this.props;
     return (
@@ -232,7 +234,8 @@ class PostCard extends React.Component {
                   {content} <br /> <br /> <hr />
                   <b>City</b>: {city} <br />
                   <b>State</b>: {state} <br />
-                  <b>Priority</b>: {priority}
+                  <b>Priority</b>: {priority} <br />
+                  <b>Advertisement Type</b>: {advt_type}
                 </p>
                 <button
                   className="btn btn-outline-danger"
