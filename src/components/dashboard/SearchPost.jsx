@@ -16,7 +16,7 @@ class SearchPost extends React.Component {
       activePage: 1,
       searchString: "",
       searchingMode: false,
-      category: "distributer",
+      category: "distributor",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -106,8 +106,8 @@ class SearchPost extends React.Component {
                       onChange={this.handleChange}
                       onBlur={this.handleSubmit}
                     >
-                      <option selected value="distributer">
-                        Distributer
+                      <option selected value="distributor">
+                        Distributor
                       </option>
                       <option value="manufacture">Manufacture</option>
                       <option value="retail">Retail</option>

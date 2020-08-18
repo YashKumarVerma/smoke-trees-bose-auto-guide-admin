@@ -153,8 +153,8 @@ class NewPostCard extends React.Component {
                 <option value="manufacture" selected>
                   Manufacture
                 </option>
-                <option value="retailer">Retailer</option>
-                <option value="distributer">Distributer</option>
+                <option value="retail">Retailer</option>
+                <option value="distributor">Distributor</option>
               </select>
             </div>
 

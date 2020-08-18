@@ -5,6 +5,7 @@ class Testimonial {
   // this function is used to authenticate user from server
   static CreateNewTestimonial(param) {
     return new Promise((resolve, reject) => {
+      console.log(param);
       axios
         .post(`${config.host}/testimonial/create`, param, {
           headers: {
