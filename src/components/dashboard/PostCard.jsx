@@ -23,6 +23,7 @@ class PostCard extends React.Component {
       priority: 0,
       city: "",
       state: "",
+      contact: "",
     };
     this.editPost = this.editPost.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
@@ -46,6 +47,7 @@ class PostCard extends React.Component {
       city,
       state,
       category,
+      contact,
     } = this.props;
     this.setState({
       name,
@@ -58,6 +60,7 @@ class PostCard extends React.Component {
       city,
       state,
       advt_type: category,
+      contact,
     });
   };
 
@@ -145,6 +148,7 @@ class PostCard extends React.Component {
       city,
       state,
       priority,
+      contact,
     } = this.state;
     const { _id } = this.props;
     console.log({
@@ -156,6 +160,7 @@ class PostCard extends React.Component {
       city,
       state,
       priority,
+      contact,
     });
     try {
       const response = await EditPost({
@@ -168,6 +173,7 @@ class PostCard extends React.Component {
           city,
           state,
           priority,
+          contact,
         },
       });
       if (response.payload.ok) {
@@ -197,6 +203,7 @@ class PostCard extends React.Component {
       state,
       priority,
       advt_type,
+      contact,
     } = this.state;
     const { interested } = this.props;
     return (
@@ -235,7 +242,8 @@ class PostCard extends React.Component {
                   <b>City</b>: {city} <br />
                   <b>State</b>: {state} <br />
                   <b>Priority</b>: {priority} <br />
-                  <b>Advertisement Type</b>: {advt_type}
+                  <b>Advertisement Type</b>: {advt_type} <br />
+                  <b>Contact Number</b> : {contact || "not specified"}
                 </p>
                 <button
                   className="btn btn-outline-danger"
@@ -321,6 +329,16 @@ class PostCard extends React.Component {
                       name="priority"
                       onChange={this.handleEditFieldChange}
                       value={this.state.priority}
+                      required
+                    />
+
+                    <InputElement
+                      label="Displayed Contact Number"
+                      placeholder="Contact Number to be shown on advt"
+                      type="number"
+                      name="contact"
+                      onChange={this.handleEditFieldChange}
+                      value={this.state.contact}
                       required
                     />
 

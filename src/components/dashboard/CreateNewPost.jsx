@@ -19,6 +19,7 @@ class NewPostCard extends React.Component {
       state: "",
       priority: 0,
       advt_type: "manufacture",
+      contact: "",
     };
   }
 
@@ -43,6 +44,7 @@ class NewPostCard extends React.Component {
         productType: this.state.category,
         featured: this.state.isFeatured === "on",
         images: [this.props.attachedImage],
+        contact: this.state.contact,
       };
       if (
         PostDetails.images === null ||
@@ -65,6 +67,7 @@ class NewPostCard extends React.Component {
         state: "",
         city: "",
         priority: "",
+        contact: "",
       });
     } catch (err) {
       alert("Error while Creating post");
@@ -128,6 +131,16 @@ class NewPostCard extends React.Component {
               name="priority"
               onChange={this.handleChange}
               value={this.state.priority}
+              required
+            />
+
+            <InputElement
+              label="Displayed Contact Number"
+              placeholder="Contact Number to be shown on advt"
+              type="number"
+              name="contact"
+              onChange={this.handleChange}
+              value={this.state.contact}
               required
             />
 
